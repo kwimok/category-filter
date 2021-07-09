@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
 
 function App() {
+  useEffect(() => {
+    fetch('https://api.publicapis.org/categories').then(res => res.json()).then(data => {
+      console.log('data', data);
+      setFiltered([...data])
+      setData([...data])
+    })
+  }, [])
+  
+  const [data, setData] = useState([])
+  const [filtered, setFiltered] = useState([])
+  const [filterText, setFilterText] = useState('')
+  const onFilter = (text) => {
+    setFilterText(text)
+    if(text) {
+      const re = new RegExp(text, 'i');
+      const filtered = data.filter(item => item.match(re))
+      setFiltered([...filtered])
+    } else {
+      setFiltered([...data])
+    }
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>Filter <input type="text" value={filterText} onChange={e => onFilter(e.target.value)} /></div>
+      <div>
+        {filtered.map((item, idx) => <div key={idx}>{item}</div>)}
+      </div>
     </div>
   );
 }
