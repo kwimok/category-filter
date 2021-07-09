@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 function App() {
   useEffect(() => {
     fetch('https://api.publicapis.org/categories').then(res => res.json()).then(data => {
-      console.log('data', data);
       setFiltered([...data])
       setData([...data])
     })
